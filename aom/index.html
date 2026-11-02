@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101522">
+  <title>แฟ้มสะสมผลงาน | เศรษฐพงศ์ หนูนารถ</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c1019;
+      --surface: #141a27;
+      --surface-raised: #1a2231;
+      --line: rgba(195, 211, 241, .13);
+      --muted: #9aa8bd;
+      --text: #f3f6fc;
+      --blue: #86adff;
+      --blue-bright: #b7ceff;
+      --gold: #d7bd88;
+      --radius: 22px;
+      font-family: "Leelawadee UI", Tahoma, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 75% -15%, rgba(80, 112, 177, .18), transparent 40rem),
+        var(--bg);
+    }
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1120px, calc(100% - 44px)); margin: 0 auto; }
+
+    .site-header {
+      position: sticky;
+      z-index: 5;
+      top: 0;
+      border-bottom: 1px solid var(--line);
+      background: rgba(12, 16, 25, .88);
+      backdrop-filter: blur(18px);
+    }
+    .nav-wrap {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      color: #0d1421;
+      background: linear-gradient(145deg, #dce8ff, #829fce);
+      border-radius: 13px;
+      font-family: Georgia, serif;
+      font-size: 19px;
+    }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; letter-spacing: .13em; }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-link {
+      padding: 10px 16px;
+      color: #b4bfd0;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 14px;
+      transition: .2s ease;
+    }
+    .nav-link:hover, .nav-link[aria-current="page"] {
+      color: white;
+      border-color: var(--line);
+      background: rgba(145, 174, 226, .1);
+    }
+    main { min-height: calc(100vh - 150px); padding: 34px 0 80px; }
+    .page { display: none; animation: appear .35s ease both; }
+    .page.active { display: block; }
+    @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .banner {
+      position: relative;
+      overflow: hidden;
+      min-height: clamp(240px, 35vw, 370px);
+      display: flex;
+      align-items: end;
+      border: 1px solid rgba(201, 218, 250, .17);
+      border-radius: 26px;
+      background: #111827 url("images/head.jpg") center 36% / cover no-repeat;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .35);
+    }
+    .banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(7, 11, 19, .73), rgba(7, 11, 19, .06) 80%),
+        linear-gradient(0deg, rgba(7, 11, 19, .64), transparent 60%);
+    }
+    .banner-copy { position: relative; z-index: 1; padding: 34px 38px; }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--blue-bright);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    .banner h1 { margin: 0; font-size: clamp(28px, 5vw, 48px); letter-spacing: -.025em; }
+    .banner p { margin: 9px 0 0; color: #d3d9e5; }
+
+    .intro-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 30px;
+      align-items: center;
+      max-width: 930px;
+      margin: -34px auto 0;
+      padding: 28px 34px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(28, 37, 54, .98), rgba(18, 24, 36, .98));
+      box-shadow: 0 20px 55px rgba(0, 0, 0, .25);
+    }
+    .profile-photo {
+      width: 160px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      object-position: center 27%;
+      border: 3px solid rgba(205, 220, 247, .66);
+      border-radius: 50%;
+      box-shadow: 0 0 0 7px rgba(125, 160, 220, .1);
+    }
+    .intro-card h2 { margin: 0 0 10px; font-size: clamp(23px, 3vw, 32px); }
+    .intro-card p { margin: 0; color: #c0cad9; line-height: 1.85; }
+    .intro-card .hello { color: var(--gold); font-size: 13px; letter-spacing: .08em; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .tag {
+      padding: 7px 12px;
+      color: #c8d8f6;
+      border: 1px solid rgba(142, 175, 231, .2);
+      border-radius: 999px;
+      background: rgba(107, 141, 201, .09);
+      font-size: 12px;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 62px 0 22px;
+    }
+    .section-heading h2 { margin: 0; font-size: 25px; }
+    .section-heading p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .section-kicker { color: var(--gold); font-size: 11px; letter-spacing: .16em; }
+    .education-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .education-card {
+      min-height: 155px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: linear-gradient(145deg, rgba(26, 34, 49, .9), rgba(18, 23, 34, .9));
+    }
+    .card-number { color: var(--gold); font: 20px Georgia, serif; }
+    .education-card h3 { margin: 23px 0 7px; font-size: 15px; }
+    .education-card p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .page-title { margin: 6px 0 28px; }
+    .page-title h1 { margin: 0 0 8px; font-size: clamp(30px, 5vw, 42px); }
+    .page-title p { margin: 0; color: var(--muted); }
+    .profile-layout { display: grid; grid-template-columns: minmax(230px, .75fr) 1.4fr; gap: 22px; }
+    .portrait-card, .info-panel, .form-panel, .empty-state, .work-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(25, 33, 48, .96), rgba(17, 22, 33, .96));
+    }
+    .portrait-card { overflow: hidden; padding: 14px; }
+    .portrait-card img { display: block; width: 100%; aspect-ratio: .86; object-fit: cover; object-position: center 22%; border-radius: 15px; }
+    .portrait-caption { padding: 17px 7px 7px; }
+    .portrait-caption strong { display: block; font-size: 18px; }
+    .portrait-caption span { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
+    .info-panel { padding: 28px; }
+    .info-panel h2 { margin: 0 0 20px; font-size: 21px; }
+    .info-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; margin: 0; }
+    .info-item { padding: 15px 0; border-top: 1px solid var(--line); }
+    .info-item dt { margin-bottom: 7px; color: var(--muted); font-size: 12px; }
+    .info-item dd { margin: 0; color: #e2e8f2; font-size: 14px; }
+    .placeholder { color: #8794a9 !important; font-style: italic; }
+    .note-box { margin-top: 20px; padding: 14px 16px; color: #c8d2e1; border-left: 2px solid var(--gold); background: rgba(215, 189, 136, .06); font-size: 13px; line-height: 1.7; }
+
+    .works-top { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 25px; }
+    .works-top .page-title { margin: 0; }
+    .count-badge { padding: 9px 14px; color: #dce7fc; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 13px; white-space: nowrap; }
+    .works-layout { display: grid; grid-template-columns: minmax(280px, .82fr) 1.35fr; gap: 22px; align-items: start; }
+    .form-panel { padding: 25px; }
+    .form-panel h2 { margin: 0 0 6px; font-size: 20px; }
+    .form-intro { margin: 0 0 22px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .field { margin-bottom: 15px; }
+    .field label { display: block; margin-bottom: 7px; color: #dce3ee; font-size: 12px; }
+    .field input, .field textarea {
+      width: 100%;
+      min-height: 43px;
+      padding: 11px 12px;
+      color: var(--text);
+      border: 1px solid rgba(185, 203, 234, .16);
+      border-radius: 11px;
+      outline: none;
+      background: rgba(8, 12, 20, .5);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field input:focus, .field textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(134, 173, 255, .12); }
+    .field input::file-selector-button { margin-right: 10px; padding: 6px 9px; color: #dce7fc; border: 0; border-radius: 7px; background: #26354e; }
+    .field textarea { min-height: 82px; resize: vertical; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .submit-button, .primary-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 17px;
+      color: #0c1421;
+      border: 0;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #d7e4ff, #8ba9dc);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform .2s, filter .2s;
+    }
+    .submit-button { width: 100%; }
+    .submit-button:hover, .primary-link:hover { transform: translateY(-1px); filter: brightness(1.08); }
+    .submit-button:disabled { opacity: .6; cursor: wait; transform: none; }
+    .form-message { min-height: 20px; margin: 12px 0 0; color: #ffc2b8; font-size: 12px; line-height: 1.5; }
+    .form-message.success { color: #a9dfbf; }
+    .works-list { display: grid; gap: 14px; }
+    .list-heading { display: flex; align-items: center; justify-content: space-between; margin: 3px 0 2px; }
+    .list-heading h2 { margin: 0; font-size: 19px; }
+    .list-heading span { color: var(--muted); font-size: 12px; }
+    .empty-state { padding: 40px 24px; color: var(--muted); text-align: center; }
+    .empty-icon { width: 49px; height: 49px; display: grid; place-items: center; margin: 0 auto 13px; color: var(--blue-bright); border: 1px solid var(--line); border-radius: 16px; background: rgba(134, 173, 255, .08); font-size: 22px; }
+    .empty-state strong { display: block; margin-bottom: 7px; color: #e4e9f2; font-size: 14px; }
+    .empty-state p { margin: 0; font-size: 12px; }
+    .work-card { display: grid; grid-template-columns: 155px 1fr; overflow: hidden; }
+    .work-image { width: 100%; height: 100%; min-height: 155px; object-fit: cover; background: #0b1019; }
+    .work-body { min-width: 0; padding: 17px 18px; }
+    .work-body h3 { overflow-wrap: anywhere; margin: 0 0 9px; font-size: 16px; }
+    .work-date { margin: 0 0 9px; color: var(--blue-bright); font-size: 12px; }
+    .work-description { margin: 0; color: #b1bdce; font-size: 12px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .work-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+    .work-time { color: var(--muted); font-size: 11px; }
+    .delete-button { padding: 6px 10px; color: #ffc2b8; border: 1px solid rgba(255, 149, 132, .2); border-radius: 8px; background: rgba(255, 149, 132, .06); cursor: pointer; font-size: 11px; }
+    .delete-button:hover { background: rgba(255, 149, 132, .14); }
+    .site-footer { padding: 20px 0 28px; color: #7e899b; border-top: 1px solid var(--line); font-size: 11px; text-align: center; }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 28px, 600px); }
+      .nav-wrap { min-height: 68px; gap: 10px; }
+      .brand { gap: 8px; font-size: 13px; }
+      .brand-mark { width: 35px; height: 35px; }
+      .nav-links { gap: 2px; }
+      .nav-link { padding: 9px 10px; font-size: 12px; }
+      main { padding-top: 20px; }
+      .banner { min-height: 245px; background-position: 42% center; }
+      .banner-copy { padding: 24px; }
+      .intro-card { grid-template-columns: 108px 1fr; gap: 18px; margin-top: -22px; padding: 20px; }
+      .profile-photo { width: 105px; }
+      .intro-card p { font-size: 13px; }
+      .education-grid { grid-template-columns: repeat(2, 1fr); }
+      .profile-layout, .works-layout { grid-template-columns: 1fr; }
+      .portrait-card { display: grid; grid-template-columns: 125px 1fr; gap: 16px; align-items: center; }
+      .portrait-card img { aspect-ratio: 1; }
+      .portrait-caption { padding: 10px 0; }
+      .works-top { align-items: start; }
+      .count-badge { font-size: 11px; }
+    }
+    @media (max-width: 460px) {
+      .shell { width: calc(100% - 24px); }
+      .brand small { display: none; }
+      .nav-link { padding: 8px 8px; font-size: 11px; }
+      .nav-wrap { gap: 4px; }
+      .brand { font-size: 12px; }
+      .intro-card { grid-template-columns: 1fr; text-align: center; }
+      .profile-photo { width: 100px; margin: 0 auto; }
+      .tag-row { justify-content: center; }
+      .section-heading { margin-top: 44px; }
+      .info-list { grid-template-columns: 1fr; }
+      .work-card { grid-template-columns: 1fr; }
+      .work-image { height: 190px; min-height: 0; }
+      .field-grid { gap: 9px; }
+      .form-panel, .info-panel { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell nav-wrap">
+      <a class="brand" href="#home" aria-label="กลับหน้าหลัก">
+        <span class="brand-mark">อ.</span>
+        <span>แฟ้มสะสมผลงาน<small>PORTFOLIO · INFORMATION TECHNOLOGY</small></span>
+      </a>
+      <nav class="nav-links" aria-label="เมนูหลัก">
+        <a class="nav-link" href="#home" data-page-link="home">หน้าหลัก</a>
+        <a class="nav-link" href="#about" data-page-link="about">ประวัติส่วนตัว</a>
+        <a class="nav-link" href="#works" data-page-link="works">ผลงาน</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="page active" id="page-home" aria-labelledby="home-title">
+      <div class="banner">
+        <div class="banner-copy">
+          <p class="eyebrow">WELCOME TO MY PORTFOLIO</p>
+          <h1 id="home-title">แฟ้มสะสมผลงาน</h1>
+          <p>พื้นที่รวบรวมการเรียนรู้ ความตั้งใจ และผลงานของผม</p>
+        </div>
+      </div>
+      <div class="intro-card">
+        <img class="profile-photo" src="images/profile.jpg" alt="รูปโปรไฟล์ของเศรษฐพงศ์ หนูนารถ">
+        <div>
+          <p class="hello">สวัสดีครับ ยินดีต้อนรับ</p>
+          <h2>ผม เศรษฐพงศ์ หนูนารถ</h2>
+          <p>ชื่อเล่นออม กำลังศึกษาอยู่ระดับชั้น ปวส. 1 กลุ่ม 2 แผนกเทคโนโลยีสารสนเทศ ผมสนใจเรียนรู้สิ่งใหม่ ๆ และนำความรู้มาสร้างสรรค์ผลงาน</p>
+          <div class="tag-row">
+            <span class="tag">ปวส. 1 · กลุ่ม 2</span>
+            <span class="tag">เทคโนโลยีสารสนเทศ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">MY LEARNING JOURNEY</p>
+          <h2>ประวัติการศึกษา</h2>
+          <p>พื้นที่สำหรับบันทึกเส้นทางการศึกษา</p>
+        </div>
+      </div>
+      <div class="education-grid" aria-label="ช่องประวัติการศึกษา 4 รายการ">
+        <article class="education-card"><span class="card-number">01</span><h3>สถานศึกษาแห่งที่ 1</h3><p>เพิ่มข้อมูลการศึกษาในภายหลัง</p></article>
+        <article class="education-card"><span class="card-number">02</span><h3>สถานศึกษาแห่งที่ 2</h3><p>เพิ่มข้อมูลการศึกษาในภายหลัง</p></article>
+        <article class="education-card"><span class="card-number">03</span><h3>สถานศึกษาแห่งที่ 3</h3><p>เพิ่มข้อมูลการศึกษาในภายหลัง</p></article>
+        <article class="education-card"><span class="card-number">04</span><h3>สถานศึกษาแห่งที่ 4</h3><p>เพิ่มข้อมูลการศึกษาในภายหลัง</p></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-about" aria-labelledby="about-title">
+      <div class="page-title">
+        <p class="eyebrow">A LITTLE ABOUT ME</p>
+        <h1 id="about-title">ประวัติส่วนตัว</h1>
+        <p>แนะนำตัวและข้อมูลส่วนตัว</p>
+      </div>
+      <div class="profile-layout">
+        <article class="portrait-card">
+          <img src="images/profile.jpg" alt="รูปถ่ายของเศรษฐพงศ์ หนูนารถ">
+          <div class="portrait-caption">
+            <strong>เศรษฐพงศ์ หนูนารถ</strong>
+            <span>ชื่อเล่น ออม</span>
+          </div>
+        </article>
+        <article class="info-panel">
+          <h2>ข้อมูลส่วนตัว</h2>
+          <dl class="info-list">
+            <div class="info-item"><dt>ชื่อ–นามสกุล</dt><dd>เศรษฐพงศ์ หนูนารถ</dd></div>
+            <div class="info-item"><dt>ชื่อเล่น</dt><dd>ออม</dd></div>
+            <div class="info-item"><dt>ระดับชั้น</dt><dd>ปวส. 1 กลุ่ม 2</dd></div>
+            <div class="info-item"><dt>แผนกวิชา</dt><dd>เทคโนโลยีสารสนเทศ</dd></div>
+            <div class="info-item"><dt>วันเดือนปีเกิด</dt><dd class="placeholder">เพิ่มข้อมูลภายหลัง</dd></div>
+            <div class="info-item"><dt>ที่อยู่</dt><dd class="placeholder">เพิ่มข้อมูลภายหลัง</dd></div>
+            <div class="info-item"><dt>งานอดิเรก</dt><dd class="placeholder">เพิ่มข้อมูลภายหลัง</dd></div>
+            <div class="info-item"><dt>ทักษะและความสามารถ</dt><dd class="placeholder">เพิ่มข้อมูลภายหลัง</dd></div>
+          </dl>
+          <div class="note-box">สามารถเติมรายละเอียดในช่อง “เพิ่มข้อมูลภายหลัง” ได้ตามต้องการ</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-works" aria-labelledby="works-title">
+      <div class="works-top">
+        <div class="page-title">
+          <p class="eyebrow">SELECTED PROJECTS</p>
+          <h1 id="works-title">ผลงานของผม</h1>
+          <p>บันทึกและรวบรวมผลงานที่ได้สร้างสรรค์</p>
+        </div>
+        <span class="count-badge" id="work-count">0 ผลงาน</span>
+      </div>
+      <div class="works-layout">
+        <form class="form-panel" id="work-form">
+          <h2>เพิ่มผลงานใหม่</h2>
+          <p class="form-intro">กรอกรายละเอียดและเลือกรูปภาพประกอบ ข้อมูลจะบันทึกไว้ในเบราว์เซอร์นี้</p>
+          <div class="field">
+            <label for="work-title">ชื่อผลงาน <span aria-hidden="true">*</span></label>
+            <input id="work-title" name="title" type="text" maxlength="120" placeholder="เช่น เว็บไซต์แนะนำแผนก" required>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="work-date">วันที่ส่ง <span aria-hidden="true">*</span></label>
+              <input id="work-date" name="date" type="date" required>
+            </div>
+            <div class="field">
+              <label for="work-week">สัปดาห์ที่ส่ง <span aria-hidden="true">*</span></label>
+              <input id="work-week" name="week" type="number" min="1" max="52" placeholder="เช่น 4" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="work-time">เวลาที่ส่ง <span aria-hidden="true">*</span></label>
+            <input id="work-time" name="time" type="time" required>
+          </div>
+          <div class="field">
+            <label for="work-description">รายละเอียดเพิ่มเติม</label>
+            <textarea id="work-description" name="description" maxlength="1000" placeholder="เล่าเกี่ยวกับผลงานชิ้นนี้..."></textarea>
+          </div>
+          <div class="field">
+            <label for="work-image">รูปภาพผลงาน <span aria-hidden="true">*</span></label>
+            <input id="work-image" name="image" type="file" accept="image/*" required>
+          </div>
+          <button class="submit-button" id="submit-button" type="submit">บันทึกผลงาน</button>
+          <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="works-list">
+          <div class="list-heading"><h2>รายการผลงาน</h2><span>เรียงจากรายการล่าสุด</span></div>
+          <div id="work-items" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="shell">แฟ้มสะสมผลงาน · เศรษฐพงศ์ หนูนารถ</div></footer>
+
+  <script>
+    (() => {
+      const pages = ["home", "about", "works"];
+      const pageElements = new Map(pages.map((name) => [name, document.getElementById(`page-${name}`)]));
+      const navLinks = [...document.querySelectorAll("[data-page-link]")];
+      const form = document.getElementById("work-form");
+      const message = document.getElementById("form-message");
+      const submitButton = document.getElementById("submit-button");
+      const workItems = document.getElementById("work-items");
+      const workCount = document.getElementById("work-count");
+      const databaseName = "aom-portfolio";
+      const databaseVersion = 1;
+      let database;
+      let imageUrls = [];
+
+      function showPage() {
+        const requested = location.hash.slice(1);
+        const current = pages.includes(requested) ? requested : "home";
+        pageElements.forEach((element, name) => {
+          element.classList.toggle("active", name === current);
+        });
+        navLinks.forEach((link) => {
+          if (link.dataset.pageLink === current) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      }
+
+      function openDatabase() {
+        return new Promise((resolve, reject) => {
+          const request = indexedDB.open(databaseName, databaseVersion);
+          request.onupgradeneeded = () => {
+            const store = request.result.createObjectStore("works", { keyPath: "id" });
+            store.createIndex("createdAt", "createdAt");
+          };
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error || new Error("ไม่สามารถเปิดฐานข้อมูลผลงานได้"));
+          request.onblocked = () => reject(new Error("ฐานข้อมูลกำลังถูกใช้งานในแท็บอื่น กรุณาปิดแท็บอื่นแล้วลองใหม่"));
+        });
+      }
+
+      function transactionDone(transaction) {
+        return new Promise((resolve, reject) => {
+          transaction.oncomplete = () => resolve();
+          transaction.onerror = () => reject(transaction.error || new Error("บันทึกข้อมูลไม่สำเร็จ"));
+          transaction.onabort = () => reject(transaction.error || new Error("การบันทึกข้อมูลถูกยกเลิก"));
+        });
+      }
+
+      async function getWorks() {
+        const transaction = database.transaction("works", "readonly");
+        const done = transactionDone(transaction);
+        const request = transaction.objectStore("works").getAll();
+        const results = await new Promise((resolve, reject) => {
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error || new Error("โหลดรายการผลงานไม่สำเร็จ"));
+        });
+        await done;
+        return results.sort((first, second) => second.createdAt - first.createdAt);
+      }
+
+      function formatDate(value) {
+        const [year, month, day] = value.split("-").map(Number);
+        return new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "long", year: "numeric" })
+          .format(new Date(year, month - 1, day));
+      }
+
+      function makeElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      }
+
+      function renderWorks(works) {
+        imageUrls.forEach((url) => URL.revokeObjectURL(url));
+        imageUrls = [];
+        workItems.replaceChildren();
+        workCount.textContent = `${works.length} ผลงาน`;
+
+        if (works.length === 0) {
+          const empty = makeElement("div", "empty-state");
+          empty.append(makeElement("span", "empty-icon", "✦"));
+          empty.append(makeElement("strong", "", "ยังไม่มีผลงาน"));
+          empty.append(makeElement("p", "", "เพิ่มผลงานชิ้นแรกได้จากแบบฟอร์ม"));
+          workItems.append(empty);
+          return;
+        }
+
+        works.forEach((work) => {
+          const card = makeElement("article", "work-card");
+          const image = makeElement("img", "work-image");
+          image.src = URL.createObjectURL(work.image);
+          image.alt = `ภาพผลงาน ${work.title}`;
+          imageUrls.push(image.src);
+          const body = makeElement("div", "work-body");
+          body.append(makeElement("h3", "", work.title));
+          body.append(makeElement("p", "work-date", `${formatDate(work.date)} · สัปดาห์ที่ ${work.week}`));
+          if (work.description) body.append(makeElement("p", "work-description", work.description));
+          const footer = makeElement("div", "work-footer");
+          footer.append(makeElement("span", "work-time", `เวลาที่ส่ง ${work.time}`));
+          const remove = makeElement("button", "delete-button", "ลบผลงาน");
+          remove.type = "button";
+          remove.addEventListener("click", () => deleteWork(work.id));
+          footer.append(remove);
+          body.append(footer);
+          card.append(image, body);
+          workItems.append(card);
+        });
+      }
+
+      async function refreshWorks() {
+        renderWorks(await getWorks());
+      }
+
+      async function deleteWork(id) {
+        if (!window.confirm("ต้องการลบผลงานรายการนี้หรือไม่?")) return;
+        try {
+          const transaction = database.transaction("works", "readwrite");
+          transaction.objectStore("works").delete(id);
+          await transactionDone(transaction);
+          await refreshWorks();
+          message.textContent = "ลบผลงานแล้ว";
+          message.classList.add("success");
+        } catch (error) {
+          message.textContent = `ลบผลงานไม่สำเร็จ: ${error.message}`;
+          message.classList.remove("success");
+        }
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+
+        const data = new FormData(form);
+        const image = data.get("image");
+        if (!(image instanceof File) || image.size === 0 || !image.type.startsWith("image/")) {
+          message.textContent = "กรุณาเลือกไฟล์รูปภาพที่ถูกต้อง";
+          message.classList.remove("success");
+          return;
+        }
+
+        submitButton.disabled = true;
+        message.textContent = "";
+        message.classList.remove("success");
+        try {
+          const transaction = database.transaction("works", "readwrite");
+          transaction.objectStore("works").add({
+            id: crypto.randomUUID(),
+            title: String(data.get("title")).trim(),
+            date: String(data.get("date")),
+            week: Number(data.get("week")),
+            time: String(data.get("time")),
+            description: String(data.get("description")).trim(),
+            image,
+            createdAt: Date.now()
+          });
+          await transactionDone(transaction);
+          form.reset();
+          await refreshWorks();
+          message.textContent = "บันทึกผลงานเรียบร้อยแล้ว";
+          message.classList.add("success");
+        } catch (error) {
+          message.textContent = `บันทึกผลงานไม่สำเร็จ: ${error.message}`;
+          message.classList.remove("success");
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+
+      window.addEventListener("hashchange", showPage);
+      showPage();
+      openDatabase()
+        .then((openedDatabase) => {
+          database = openedDatabase;
+          database.onversionchange = () => database.close();
+          return refreshWorks();
+        })
+        .catch((error) => {
+          message.textContent = `เปิดพื้นที่บันทึกผลงานไม่สำเร็จ: ${error.message}`;
+          message.classList.remove("success");
+        });
+    })();
+  </script>
+</body>
+</html>
